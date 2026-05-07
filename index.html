@@ -755,10 +755,10 @@ async function openScanner(mod) {
 
   try {
     const video = document.getElementById('scanner-video');
-    if (typeof ZXingBrowser !== 'undefined') {
+    if (typeof ZXing !== 'undefined') {
       const reader = new ZXing.BrowserMultiFormatReader();
       let sonBarkod = null, sonZaman = 0;
-      zxingControls = await reader.decodeFromVideoDevice(undefined, video, (result, err) => {
+      zxingControls = await reader.decodeFromVideoDevice(null, video, (result, err) => {
         if (result) {
           const barkod = result.getText().trim();
           const su = Date.now();
