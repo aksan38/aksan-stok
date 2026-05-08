@@ -758,20 +758,20 @@ async function openScanner(mod) {
     if (typeof ZXing !== 'undefined') {
       const reader = new ZXing.BrowserMultiFormatReader();
       let sonBarkod = null, sonZaman = 0;
-      let scanIslendi = false;
-      zxingControls = await reader.decodeFromVideoDevice(null, video, (result, err) => {
-        if (result) {
-          if (scanIslendi) return;
-          const barkod = result.getText().trim();
-          const su = Date.now();
-          if (barkod === sonBarkod && su - sonZaman < 2000) return;
-          sonBarkod = barkod; sonZaman = su;
-          if (mod === 'toplu') { handleTopluBarkod(barkod); return; }
-          scanIslendi = true;
-          closeScanner();
-          handleBarkod(barkod, mod);
-        }
-      });
+let scanIslendi = false;
+zxingControls = await reader.decodeFromVideoDevice(null, video, (result, err) => {
+  if (result) {
+    if (mod !== 'toplu' && scanIslendi) return;
+    const barkod = result.getText().trim();
+    const su = Date.now();
+    if (barkod === sonBarkod && su - sonZaman < 2000) return;
+    sonBarkod = barkod; sonZaman = su;
+    if (mod === 'toplu') { handleTopluBarkod(barkod); return; }
+    scanIslendi = true;
+    closeScanner();
+    handleBarkod(barkod, mod);
+  }
+});
     } else {
       throw new Error('ZXing yok');
     }
