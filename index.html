@@ -1375,6 +1375,21 @@ function scanForUrunModal() { openScanner('urun-modal'); }
 // ========== HELPERS ==========
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
+// Backdrop tikla kapat
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('modal-backdrop')) {
+    e.target.classList.remove('open');
+  }
+});
+
+// Escape ile kapat
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+    if (scanAcik) closeScanner();
+  }
+});
+
 function toast(msg,tip) {
   clearTimeout(toastTimer);
   const el=document.getElementById('toast');
